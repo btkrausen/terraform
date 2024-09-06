@@ -1,3 +1,7 @@
+
+# This Terraform configuration file creates a VPC and associated resources for different environments.
+
+# Configuring the required provider for AWS.
 terraform {
   required_providers {
     aws = {
@@ -7,16 +11,32 @@ terraform {
   }
 }
 
+# Resource: aws_vpc.prd-vpc
+# Description: Creates a VPC for the production environment.
 resource "aws_vpc" "prd-vpc" {
   cidr_block = "10.0.0.0/16"
 }
-###############################################################
-# using comments to help invoke better suggestions from Copilot
-###############################################################
-# creating a new vpc for development workloads
+
+# Resource: aws_vpc.dev-vpc
+# Description: Creates a VPC for the development environment.
 resource "aws_vpc" "dev-vpc" {
   cidr_block = "10.10.0.0/16"
 }
+
+# Try creating the resource block for an aws_eks_cluster resource using Copilot here
+# Do NOT apply this configuration as it will incur costs
+# I've commented it out to prevent accidental execution
+
+# resource "aws_eks_cluster" "my-cluster" {
+#   name     = "my-cluster"
+#   role_arn = aws_iam_role.my-cluster-role.arn
+#   vpc_config {
+#     subnet_ids = [aws_subnet.prd-pub-subnet-1.id, aws_subnet.prd-pub-subnet-2.id, aws_subnet.prd-pub-subnet-3.id]
+#   }
+# }
+
+# Resource: aws_security_group.dev-web-sg
+# Description: Creates a security group for the development web server.
 resource "aws_security_group" "dev-web-sg" {
   vpc_id = aws_vpc.dev-vpc.id
 
@@ -29,20 +49,14 @@ resource "aws_security_group" "dev-web-sg" {
   }
 }
 
-# eks cluster for development web workloads
-resource "aws_eks_cluster" "dev-cluster" {
-  name     = "dev-cluster"
-  role_arn = "arn:aws:iam::123456789012:role/eks-role"
-  vpc_config {
-    security_group_ids = [aws_security_group.dev-web-sg.id]
-    subnet_ids         = ["subnet-1234567890abcdef0", "subnet-1234567890abcdef1", "subnet-1234567890abcdef2"]
-  }
+# Resource: aws_vpc.test-vpc
+# Description: Creates a VPC for testing Copilot features.
+resource "aws_vpc" "test-vpc" {
+  cidr_block = "10.20.0.0/16"
 }
 
-# creating a new vpc for production workloads
-resource "aws_vpc" "prd-vpc" {
-  cidr_block = "
-  
+# Resource: aws_subnet.prd-pub-subnet-1
+# Description: Creates a public subnet in the production VPC.
 resource "aws_subnet" "prd-pub-subnet-1" {
   vpc_id            = aws_vpc.prd-vpc.id
   cidr_block        = "10.0.0.0/24"
@@ -53,6 +67,8 @@ resource "aws_subnet" "prd-pub-subnet-1" {
   }
 }
 
+# Resource: aws_subnet.prd-pub-subnet-2
+# Description: Creates a public subnet in the production VPC.
 resource "aws_subnet" "prd-pub-subnet-2" {
   vpc_id            = aws_vpc.prd-vpc.id
   cidr_block        = "10.0.1.0/24"
@@ -63,6 +79,8 @@ resource "aws_subnet" "prd-pub-subnet-2" {
   }
 }
 
+# Resource: aws_subnet.prd-pub-subnet-3
+# Description: Creates a public subnet in the production VPC.
 resource "aws_subnet" "prd-pub-subnet-3" {
   vpc_id            = aws_vpc.prd-vpc.id
   cidr_block        = "10.0.2.0/24"
@@ -73,6 +91,8 @@ resource "aws_subnet" "prd-pub-subnet-3" {
   }
 }
 
+# Resource: aws_subnet.prd-pri-subnet-1
+# Description: Creates a private subnet in the production VPC.
 resource "aws_subnet" "prd-pri-subnet-1" {
   vpc_id            = aws_vpc.prd-vpc.id
   cidr_block        = "10.0.10.0/24"
@@ -83,6 +103,8 @@ resource "aws_subnet" "prd-pri-subnet-1" {
   }
 }
 
+# Resource: aws_subnet.prd-pri-subnet-2
+# Description: Creates a private subnet in the production VPC.
 resource "aws_subnet" "prd-pri-subnet-2" {
   vpc_id            = aws_vpc.prd-vpc.id
   cidr_block        = "10.0.11.0/24"
@@ -93,6 +115,8 @@ resource "aws_subnet" "prd-pri-subnet-2" {
   }
 }
 
+# Resource: aws_subnet.prd-pri-subnet-3
+# Description: Creates a private subnet in the production VPC.
 resource "aws_subnet" "prd-pri-subnet-3" {
   vpc_id            = aws_vpc.prd-vpc.id
   cidr_block        = "10.0.12.0/24"
@@ -103,6 +127,8 @@ resource "aws_subnet" "prd-pri-subnet-3" {
   }
 }
 
+# Resource: aws_internet_gateway.prd-igw
+# Description: Creates an internet gateway for the production VPC.
 resource "aws_internet_gateway" "prd-igw" {
   vpc_id = aws_vpc.prd-vpc.id
 
@@ -111,6 +137,8 @@ resource "aws_internet_gateway" "prd-igw" {
   }
 }
 
+# Resource: aws_route_table.prd-pub-rt
+# Description: Creates a route table for the public subnets in the production VPC.
 resource "aws_route_table" "prd-pub-rt" {
   vpc_id = aws_vpc.prd-vpc.id
 
@@ -120,36 +148,50 @@ resource "aws_route_table" "prd-pub-rt" {
   }
 }
 
+# Resource: aws_route_table_association.prd-pub-rt-assoc-1
+# Description: Associates the public subnet 1 with the public route table in the production VPC.
 resource "aws_route_table_association" "prd-pub-rt-assoc-1" {
   subnet_id      = aws_subnet.prd-pub-subnet-1.id
   route_table_id = aws_route_table.prd-pub-rt.id
 }
 
+# Resource: aws_route_table_association.prd-pub-rt-assoc-2
+# Description: Associates the public subnet 2 with the public route table in the production VPC.
 resource "aws_route_table_association" "prd-pub-rt-assoc-2" {
   subnet_id      = aws_subnet.prd-pub-subnet-2.id
   route_table_id = aws_route_table.prd-pub-rt.id
 }
 
+# Resource: aws_route_table_association.prd-pub-rt-assoc-3
+# Description: Associates the public subnet 3 with the public route table in the production VPC.
 resource "aws_route_table_association" "prd-pub-rt-assoc-3" {
   subnet_id      = aws_subnet.prd-pub-subnet-3.id
   route_table_id = aws_route_table.prd-pub-rt.id
 }
 
+# Resource: aws_route_table.prd-pri-rt
+# Description: Creates a route table for the private subnets in the production VPC.
 resource "aws_route_table" "prd-pri-rt" {
   vpc_id = aws_vpc.prd-vpc.id
 }
 
+# Resource: aws_route_table_association.prd-pri-rt-assoc-1
+# Description: Associates the private subnet 1 with the private route table in the production VPC.
 resource "aws_route_table_association" "prd-pri-rt-assoc-1" {
   subnet_id      = aws_subnet.prd-pri-subnet-1.id
   route_table_id = aws_route_table.prd-pri-rt.id
 }
 
+# Resource: aws_route_table_association.prd-pri-rt-assoc-2
+# Description: Associates the private subnet 2 with the private route table in the production VPC.
 resource "aws_route_table_association" "prd-pri-rt-assoc-2" {
   subnet_id      = aws_subnet.prd-pri-subnet-2.id
   route_table_id = aws_route_table.prd-pri-rt.id
 }
 
+# Resource: aws_route_table_association.prd-pri-rt-assoc-3
+# Description: Associates the private subnet 3 with the private route table in the production VPC.
 resource "aws_route_table_association" "prd-pri-rt-assoc-3" {
   subnet_id      = aws_subnet.prd-pri-subnet-3.id
   route_table_id = aws_route_table.prd-pri-rt.id
-} 
+}
