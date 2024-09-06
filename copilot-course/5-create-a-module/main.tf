@@ -21,11 +21,12 @@ resource "aws_vpc" "prd-vpc" {
 # Description: Creates a VPC for the development environment.
 
 # Use Copilot to create a new module for the development VPC
-# Solution: change this resource block to 
-# module "dev-vpc" { 
-#   source = "./modules/vpc" 
-#   cidr_block = "var.dev_vpc_cidr_block"
-#   vpc_name = "dev_vpc_name"
+# Solution: change the resource block below to: 
+# module "vpc" {
+#   source = "./modules/vpc"
+
+#   vpc_cidr_block = var.dev_cidr_block
+#   vpc_name       = var.dev_vpc_name
 # }
 
 resource "aws_vpc" "dev-vpc" {
@@ -35,6 +36,8 @@ resource "aws_vpc" "dev-vpc" {
 # Resource: aws_security_group.dev-web-sg
 # Description: Creates a security group for the development web server.
 resource "aws_security_group" "dev-web-sg" {
+  # Change the parameter below to use the new module
+  # Solution: vpc_id = module.vpc.vpc_id
   vpc_id = aws_vpc.dev-vpc.id
 
   ingress {
