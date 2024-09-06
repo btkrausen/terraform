@@ -21,6 +21,13 @@ resource "aws_vpc" "prd-vpc" {
 # Description: Creates a VPC for the development environment.
 
 # Use Copilot to create a new module for the development VPC
+# Solution: change this resource block to 
+# module "dev-vpc" { 
+#   source = "./modules/vpc" 
+#   cidr_block = "var.dev_vpc_cidr_block"
+#   vpc_name = "dev_vpc_name"
+# }
+
 resource "aws_vpc" "dev-vpc" {
   cidr_block = "10.10.0.0/16"
 }
